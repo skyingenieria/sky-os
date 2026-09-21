@@ -1,8 +1,6 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import ProjectTabs from "@/components/ProjectTabs";
-import { EstadoBadge } from "@/components/ui";
+import ProjectMenu from "@/components/ProjectMenu";
 
 export const dynamic = "force-dynamic";
 
@@ -24,21 +22,9 @@ export default async function ProyectoLayout({
   if (!proyecto) notFound();
 
   return (
-    <div style={{ padding: "28px 40px 40px", maxWidth: 1100 }}>
-      <Link href="/proyectos" style={{ fontSize: 12.5, color: "var(--text-muted)" }}>
-        ← Proyectos
-      </Link>
-      <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 8 }}>
-        <h1 style={{ fontSize: 23, fontWeight: 800, margin: 0 }}>{proyecto.nombre}</h1>
-        <EstadoBadge estado={proyecto.estado} />
-      </div>
-      <div style={{ fontSize: 12.5, color: "var(--text-muted)", marginTop: 2 }}>
-        {[proyecto.codigo, proyecto.cliente].filter(Boolean).join(" · ") || "Sin datos"} · Módulo 3 · Análisis de cargas
-      </div>
-
-      <ProjectTabs id={proyecto.id} />
-
-      <div style={{ marginTop: 22 }}>{children}</div>
+    <div style={{ display: "flex", minHeight: "100dvh" }}>
+      <ProjectMenu proyecto={proyecto as never} />
+      <div style={{ flex: 1, minWidth: 0, padding: "28px 40px 40px" }}>{children}</div>
     </div>
   );
 }

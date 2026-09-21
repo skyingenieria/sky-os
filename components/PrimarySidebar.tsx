@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { upsertProyecto } from "@/app/proyectos/actions";
+import { CATALOGOS } from "@/lib/catalogos";
 import { EstadoBadge, btn, inputStyle } from "@/components/ui";
 
 interface Proyecto {
@@ -13,13 +14,14 @@ interface Proyecto {
   estado: string | null;
 }
 
-export default function ProjectsSidebar({ proyectos }: { proyectos: Proyecto[] }) {
+export default function PrimarySidebar({ proyectos }: { proyectos: Proyecto[] }) {
   const pathname = usePathname();
   const router = useRouter();
   const [modal, setModal] = useState(false);
   const [form, setForm] = useState({ nombre: "", codigo: "", cliente: "", tipo_vivienda: "Unifamiliar" });
   const [err, setErr] = useState<string | null>(null);
   const [pending, start] = useTransition();
+  const inCatalogos = pathname.startsWith("/catalogos");
 
   function create(e: React.FormEvent) {
     e.preventDefault();
@@ -37,7 +39,7 @@ export default function ProjectsSidebar({ proyectos }: { proyectos: Proyecto[] }
   return (
     <aside
       style={{
-        width: 230,
+        width: 256,
         borderRight: "1px solid var(--border)",
         background: "var(--surface)",
         position: "sticky",
@@ -47,18 +49,25 @@ export default function ProjectsSidebar({ proyectos }: { proyectos: Proyecto[] }
         flexDirection: "column",
       }}
     >
-      <div style={{ padding: "16px 16px 10px", borderBottom: "1px solid var(--border)" }}>
-        <div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600, letterSpacing: "0.06em" }}>
-          PROYECTOS
+      <Link href="/proyectos" style={{ padding: "18px 18px 14px", borderBottom: "1px solid var(--border)", display: "block" }}>
+        <div style={{ fontWeight: 800, fontSize: 18, letterSpacing: "0.02em" }}>
+          SKY<span style={{ color: "var(--brand)" }}>·OS</span>
         </div>
-        <button style={{ ...btn("brand"), width: "100%", marginTop: 10 }} onClick={() => { setModal(true); setErr(null); }}>
+        <div style={{ fontSize: 11.5, color: "var(--text-muted)", marginTop: 2 }}>Ingeniería estructural</div>
+      </Link>
+
+      <div style={{ padding: "12px 12px 8px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 4px 8px" }}>
+          <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.08em", color: "var(--text-muted)" }}>PROYECTOS</span>
+        </div>
+        <button style={{ ...btn("brand"), width: "100%" }} onClick={() => { setModal(true); setErr(null); }}>
           + Nuevo proyecto
         </button>
       </div>
 
-      <nav style={{ padding: 8, overflowY: "auto", flex: 1 }}>
+      <nav style={{ padding: "0 8px", overflowY: "auto", flex: 1 }}>
         {proyectos.length === 0 && (
-          <div style={{ padding: 12, fontSize: 12.5, color: "var(--text-muted)" }}>Sin proyectos.</div>
+          <div style={{ padding: 12, fontSize: 12.5, color: "var(--text-muted)" }}>Sin proyectos todavía.</div>
         )}
         {proyectos.map((p) => {
           const active = pathname.startsWith(`/proyectos/${p.id}`);
@@ -71,13 +80,12 @@ export default function ProjectsSidebar({ proyectos }: { proyectos: Proyecto[] }
                 padding: "9px 11px",
                 borderRadius: 8,
                 marginBottom: 2,
+                borderLeft: active ? "2px solid var(--brand)" : "2px solid transparent",
                 background: active ? "var(--surface-2)" : "transparent",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ fontSize: 13.5, fontWeight: active ? 700 : 500, color: active ? "var(--brand)" : "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {p.nombre}
-                </span>
+              <div style={{ fontSize: 13.5, fontWeight: active ? 700 : 500, color: active ? "var(--brand)" : "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {p.nombre}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 3 }}>
                 {p.codigo && <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{p.codigo}</span>}
@@ -87,6 +95,38 @@ export default function ProjectsSidebar({ proyectos }: { proyectos: Proyecto[] }
           );
         })}
       </nav>
+
+      {/* GLOBAL — al fondo (no se toca seguido) */}
+      <div style={{ borderTop: "1px solid var(--border)", padding: 8 }}>
+        <div style={{ padding: "6px 8px 4px", fontSize: 10.5, fontWeight: 700, letterSpacing: "0.08em", color: "var(--text-muted)" }}>GLOBAL</div>
+        <Link
+          href="/catalogos"
+          style={{
+            display: "flex", alignItems: "center", gap: 8, padding: "8px 11px", borderRadius: 8,
+            fontSize: 13.5, fontWeight: inCatalogos ? 700 : 500,
+            color: inCatalogos ? "var(--brand)" : "var(--text)",
+            background: inCatalogos ? "var(--surface-2)" : "transparent",
+          }}
+        >
+          <span style={{ fontSize: 15 }}>📚</span> Catálogos globales
+        </Link>
+        {inCatalogos && (
+          <div style={{ margin: "2px 0 2px 26px", display: "flex", flexDirection: "column" }}>
+            {CATALOGOS.map((c) => {
+              const cactive = pathname === `/catalogos/${c.slug}`;
+              return (
+                <Link
+                  key={c.slug}
+                  href={`/catalogos/${c.slug}`}
+                  style={{ padding: "5px 10px", borderRadius: 6, fontSize: 12.5, color: cactive ? "var(--brand)" : "var(--text-muted)", background: cactive ? "var(--surface-2)" : "transparent", fontWeight: cactive ? 600 : 400 }}
+                >
+                  {c.title}
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </div>
 
       {modal && (
         <div style={overlay} onClick={() => setModal(false)}>
