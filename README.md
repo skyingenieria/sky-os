@@ -10,8 +10,8 @@ disperso en Google Sheets en una sola app.
 | # | Módulo | Estado |
 |---|--------|--------|
 | 1 | Parámetros generales | pendiente |
-| 2 | **Catálogos globales** | ✅ en curso |
-| 3 | Análisis de cargas | pendiente |
+| 2 | **Catálogos globales** | ✅ |
+| 3 | **Análisis de cargas** | ✅ en curso |
 | 4 | Losas de viguetas | pendiente |
 | 5 | Escaleras / estribos | pendiente |
 | 6 | Memorias PDF | pendiente |
@@ -27,6 +27,22 @@ Fuente única de verdad. 8 catálogos, CRUD genérico dirigido por config
 `tipos_muro`, `tipos_fundacion`, `estados_calculo`.
 
 Los datos se sembraron desde la pestaña `Aux` del Sheet *Parámetros & Cargas*.
+
+### Módulo 3 — Análisis de cargas (project-scoped)
+
+Primer módulo por proyecto. Tabla `proyectos` como contenedor y tres tipos de
+carga, todos con columnas generadas en Postgres y FKs a los catálogos:
+
+- **Cargas muertas superficiales** — paquetes (assemblies) con capas de material;
+  `q = e·γ` (volumétrico) o `q` directo (superficial); total = suma de capas.
+- **Cargas de muro** — `qD = Qp·H`, con Qp tomado del catálogo de mampostería.
+- **Cargas sobre losa** — `P = Qp·L·H`, `QD = P/(Lx·Ly)`.
+
+Rutas: `/proyectos`, `/proyectos/[id]` (resumen) y las tres pestañas de carga.
+Sembrado un proyecto demo (`FAAPPP`) con los datos del template (CM / CM-Extra).
+
+> La memoria de cálculo (`MC`) es un reporte denormalizado que se autogenera de
+> estos datos; se implementará junto con el Módulo 6 (memorias PDF).
 
 ## Desarrollo
 
