@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { CATALOGOS } from "@/lib/catalogos";
 
 const MODULOS = [
-  { n: 1, label: "Parámetros generales", href: null },
+  { n: 1, label: "Información del proyecto", href: "/proyectos" },
   { n: 2, label: "Catálogos globales", href: "/catalogos" },
   { n: 3, label: "Análisis de cargas", href: "/proyectos" },
   { n: 4, label: "Losas de viguetas", href: null },

@@ -7,6 +7,7 @@ export default function ProjectTabs({ id }: { id: number }) {
   const pathname = usePathname();
   const base = `/proyectos/${id}`;
   const tabs = [
+    { href: `${base}/informacion`, label: "Información" },
     { href: base, label: "Resumen" },
     { href: `${base}/cargas-muertas`, label: "Cargas muertas" },
     { href: `${base}/cargas-muro`, label: "Cargas de muro" },

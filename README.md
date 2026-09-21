@@ -9,7 +9,7 @@ disperso en Google Sheets en una sola app.
 
 | # | Módulo | Estado |
 |---|--------|--------|
-| 1 | Parámetros generales | pendiente |
+| 1 | **Información del proyecto** | ✅ en curso |
 | 2 | **Catálogos globales** | ✅ |
 | 3 | **Análisis de cargas** | ✅ en curso |
 | 4 | Losas de viguetas | pendiente |
@@ -27,6 +27,15 @@ Fuente única de verdad. 8 catálogos, CRUD genérico dirigido por config
 `tipos_muro`, `tipos_fundacion`, `estados_calculo`.
 
 Los datos se sembraron desde la pestaña `Aux` del Sheet *Parámetros & Cargas*.
+
+### Módulo 1 — Información del proyecto (intake)
+
+Captura el formulario de "Reunión de información" que completa el arquitecto:
+info general, niveles, sistema estructural (metodología constructiva), paquetes
+de mampostería y paquetes de solados por zona. Tablas: columnas extra en
+`proyectos` + `proyecto_niveles`, `proyecto_muros`, `proyecto_solados` +
+`proyecto_solado_capas`. Se accede desde la **barra lateral de proyectos**
+(segunda barra, con botón "+ Nuevo proyecto") → pestaña **Información**.
 
 ### Módulo 3 — Análisis de cargas (project-scoped)
 
